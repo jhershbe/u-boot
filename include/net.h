@@ -842,7 +842,14 @@ void string_to_enetaddr(const char *addr, uint8_t *enetaddr);
 /* Convert an IP address to a string */
 void ip_to_string(struct in_addr x, char *s);
 
-/* Convert a string to ip address */
+/**
+ * string_to_ip() - Convert a string to ip address
+ *
+ * Implemented in lib/net_utils.c (built unconditionally)
+ *
+ * @s: Input string to parse
+ * @return: in_addr struct containing the parsed IP address
+ */
 struct in_addr string_to_ip(const char *s);
 
 /* Convert a VLAN id to a string */

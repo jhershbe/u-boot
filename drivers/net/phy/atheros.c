@@ -110,13 +110,12 @@ static int ar8031_config(struct phy_device *phydev)
 static int ar8035_config(struct phy_device *phydev)
 {
 	int ret;
-	int regval;
 
-	phy_write(phydev, MDIO_DEVAD_NONE, 0xd, 0x0007);
-	phy_write(phydev, MDIO_DEVAD_NONE, 0xe, 0x8016);
-	phy_write(phydev, MDIO_DEVAD_NONE, 0xd, 0x4007);
-	regval = phy_read(phydev, MDIO_DEVAD_NONE, 0xe);
-	phy_write(phydev, MDIO_DEVAD_NONE, 0xe, (regval|0x0018));
+	ret = phy_read_mmd(phydev, 7, 0x8016);
+	if (ret < 0)
+		return ret;
+	ret |= 0x0018;
+	phy_write_mmd(phydev, 7, 0x8016, ret);
 
 	ret = ar803x_delay_config(phydev);
 	if (ret < 0)

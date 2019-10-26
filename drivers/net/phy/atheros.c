@@ -12,10 +12,10 @@
 #define AR803x_PHY_DEBUG_DATA_REG	0x1e
 
 #define AR803x_DEBUG_REG_5		0x5
-#define AR803x_RGMII_TX_CLK_DLY		0x100
+#define AR803x_RGMII_TX_CLK_DLY		BIT(8)
 
 #define AR803x_DEBUG_REG_0		0x0
-#define AR803x_RGMII_RX_CLK_DLY		0x8000
+#define AR803x_RGMII_RX_CLK_DLY		BIT(15)
 
 static int ar803x_debug_reg_read(struct phy_device *phydev, u16 reg)
 {
@@ -74,16 +74,16 @@ static int ar803x_delay_config(struct phy_device *phydev)
 
 	if (phydev->interface == PHY_INTERFACE_MODE_RGMII_TXID ||
 	    phydev->interface == PHY_INTERFACE_MODE_RGMII_ID) {
-		ret = ar803x_debug_reg_write(phydev, AR803x_DEBUG_REG_5,
-					     AR803x_RGMII_TX_CLK_DLY);
+		ret = ar803x_debug_reg_mask(phydev, AR803x_DEBUG_REG_5,
+					    0, AR803x_RGMII_TX_CLK_DLY);
 		if (ret < 0)
 			return ret;
 	}
 
 	if (phydev->interface == PHY_INTERFACE_MODE_RGMII_RXID ||
 	    phydev->interface == PHY_INTERFACE_MODE_RGMII_ID) {
-		ret = ar803x_debug_reg_write(phydev, AR803x_DEBUG_REG_0,
-					     AR803x_RGMII_RX_CLK_DLY);
+		ret = ar803x_debug_reg_mask(phydev, AR803x_DEBUG_REG_0,
+					    0, AR803x_RGMII_RX_CLK_DLY);
 		if (ret < 0)
 			return ret;
 	}

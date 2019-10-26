@@ -68,19 +68,36 @@ static int ar8021_config(struct phy_device *phydev)
 	return 0;
 }
 
-static int ar8031_config(struct phy_device *phydev)
+static int ar803x_delay_config(struct phy_device *phydev)
 {
+	int ret;
+
 	if (phydev->interface == PHY_INTERFACE_MODE_RGMII_TXID ||
 	    phydev->interface == PHY_INTERFACE_MODE_RGMII_ID) {
-		ar803x_debug_reg_write(phydev, AR803x_DEBUG_REG_5,
-				       AR803x_RGMII_TX_CLK_DLY);
+		ret = ar803x_debug_reg_write(phydev, AR803x_DEBUG_REG_5,
+					     AR803x_RGMII_TX_CLK_DLY);
+		if (ret < 0)
+			return ret;
 	}
 
 	if (phydev->interface == PHY_INTERFACE_MODE_RGMII_RXID ||
 	    phydev->interface == PHY_INTERFACE_MODE_RGMII_ID) {
-		ar803x_debug_reg_write(phydev, AR803x_DEBUG_REG_0,
-				       AR803x_RGMII_RX_CLK_DLY);
+		ret = ar803x_debug_reg_write(phydev, AR803x_DEBUG_REG_0,
+					     AR803x_RGMII_RX_CLK_DLY);
+		if (ret < 0)
+			return ret;
 	}
+
+	return 0;
+}
+
+static int ar8031_config(struct phy_device *phydev)
+{
+	int ret;
+
+	ret = ar803x_delay_config(phydev);
+	if (ret < 0)
+		return ret;
 
 	phydev->supported = phydev->drv->features;
 
@@ -92,6 +109,7 @@ static int ar8031_config(struct phy_device *phydev)
 
 static int ar8035_config(struct phy_device *phydev)
 {
+	int ret;
 	int regval;
 
 	phy_write(phydev, MDIO_DEVAD_NONE, 0xd, 0x0007);
@@ -103,19 +121,9 @@ static int ar8035_config(struct phy_device *phydev)
 	ar803x_debug_reg_mask(phydev, AR803x_DEBUG_REG_5,
 			      0, AR803x_RGMII_TX_CLK_DLY);
 
-	if ((phydev->interface == PHY_INTERFACE_MODE_RGMII_ID) ||
-	    (phydev->interface == PHY_INTERFACE_MODE_RGMII_TXID)) {
-		/* enable tx delay */
-		ar803x_debug_reg_write(phydev, AR803x_DEBUG_REG_5,
-				       AR803x_RGMII_TX_CLK_DLY);
-	}
-
-	if ((phydev->interface == PHY_INTERFACE_MODE_RGMII_ID) ||
-	    (phydev->interface == PHY_INTERFACE_MODE_RGMII_RXID)) {
-		/* enable rx delay */
-		ar803x_debug_reg_write(phydev, AR803x_DEBUG_REG_0,
-				       AR803x_RGMII_RX_CLK_DLY);
-	}
+	ret = ar803x_delay_config(phydev);
+	if (ret < 0)
+		return ret;
 
 	phydev->supported = phydev->drv->features;
 

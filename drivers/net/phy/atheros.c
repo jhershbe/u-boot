@@ -273,12 +273,6 @@ static int ar8035_config(struct phy_device *phydev)
 	if (ret < 0)
 		return ret;
 
-	ret = phy_read_mmd(phydev, 7, 0x8016);
-	if (ret < 0)
-		return ret;
-	ret |= 0x0018;
-	phy_write_mmd(phydev, 7, 0x8016, ret);
-
 	ret = ar803x_delay_config(phydev);
 	if (ret < 0)
 		return ret;

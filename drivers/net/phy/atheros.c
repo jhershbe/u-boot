@@ -241,31 +241,7 @@ static int ar803x_of_init(struct phy_device *phydev)
 	return 0;
 }
 
-static int ar8031_config(struct phy_device *phydev)
-{
-	int ret;
-
-	ret = ar803x_of_init(phydev);
-	if (ret < 0)
-		return ret;
-
-	ret = ar803x_delay_config(phydev);
-	if (ret < 0)
-		return ret;
-
-	ret = ar803x_regs_config(phydev);
-	if (ret < 0)
-		return ret;
-
-	phydev->supported = phydev->drv->features;
-
-	genphy_config_aneg(phydev);
-	genphy_restart_aneg(phydev);
-
-	return 0;
-}
-
-static int ar8035_config(struct phy_device *phydev)
+static int ar803x_config(struct phy_device *phydev)
 {
 	int ret;
 
@@ -304,7 +280,7 @@ static struct phy_driver AR8031_driver =  {
 	.uid = 0x4dd074,
 	.mask = 0xffffffef,
 	.features = PHY_GBIT_FEATURES,
-	.config = ar8031_config,
+	.config = ar803x_config,
 	.startup = genphy_startup,
 	.shutdown = genphy_shutdown,
 };
@@ -314,7 +290,7 @@ static struct phy_driver AR8035_driver =  {
 	.uid = 0x4dd072,
 	.mask = 0xffffffef,
 	.features = PHY_GBIT_FEATURES,
-	.config = ar8035_config,
+	.config = ar803x_config,
 	.startup = genphy_startup,
 	.shutdown = genphy_shutdown,
 };

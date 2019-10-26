@@ -118,9 +118,6 @@ static int ar8035_config(struct phy_device *phydev)
 	regval = phy_read(phydev, MDIO_DEVAD_NONE, 0xe);
 	phy_write(phydev, MDIO_DEVAD_NONE, 0xe, (regval|0x0018));
 
-	ar803x_debug_reg_mask(phydev, AR803x_DEBUG_REG_5,
-			      0, AR803x_RGMII_TX_CLK_DLY);
-
 	ret = ar803x_delay_config(phydev);
 	if (ret < 0)
 		return ret;

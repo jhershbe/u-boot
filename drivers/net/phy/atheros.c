@@ -78,12 +78,22 @@ static int ar803x_delay_config(struct phy_device *phydev)
 					    0, AR803x_RGMII_TX_CLK_DLY);
 		if (ret < 0)
 			return ret;
+	} else {
+		ret = ar803x_debug_reg_mask(phydev, AR803x_DEBUG_REG_5,
+					    AR803x_RGMII_TX_CLK_DLY, 0);
+		if (ret < 0)
+			return ret;
 	}
 
 	if (phydev->interface == PHY_INTERFACE_MODE_RGMII_RXID ||
 	    phydev->interface == PHY_INTERFACE_MODE_RGMII_ID) {
 		ret = ar803x_debug_reg_mask(phydev, AR803x_DEBUG_REG_0,
 					    0, AR803x_RGMII_RX_CLK_DLY);
+		if (ret < 0)
+			return ret;
+	} else {
+		ret = ar803x_debug_reg_mask(phydev, AR803x_DEBUG_REG_0,
+					    AR803x_RGMII_RX_CLK_DLY, 0);
 		if (ret < 0)
 			return ret;
 	}

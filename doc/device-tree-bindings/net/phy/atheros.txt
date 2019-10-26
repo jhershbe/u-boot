@@ -1,0 +1,22 @@
+* Atheros PHY Device Tree binding
+
+Required properties:
+- reg: PHY address
+
+Optional properties:
+- atheros,clk-out-frequency: Clock frequency of the CLK_25M pin in Hz.
+	Either 25000000, 50000000, 62500000 or 125000000.
+- atheros,clk-out-strength: Clock output buffer driver strength.
+	Either "full", "half" or "quarter".
+- atheros,keep-pll-enabled: Keep the PLL running if no link is present.
+	Don't go into hibernation mode.
+- atheros,rgmii-io-1v8: Use 1.8V as RGMII I/O voltage, the default is 1.5V.
+
+Example:
+
+	ethernet-phy@0 {
+		reg = <0>;
+		atheros-clk-out-frequency = <125000000>;
+		atheros,keep-pll-enabled;
+		atheros,rgmii-io-1v8;
+	};

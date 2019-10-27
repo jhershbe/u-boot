@@ -191,6 +191,8 @@ static int ar803x_of_init(struct phy_device *phydev)
 	if (!ofnode_valid(node))
 		return -EINVAL;
 
+	debug("%s: found PHY node: %s\n", __func__, ofnode_get_name(node));
+
 	if (ofnode_read_bool(node, "atheros,keep-pll-enabled"))
 		priv->flags |= AR803x_FLAG_KEEP_PLL_ENABLED;
 	if (ofnode_read_bool(node, "atheros,rgmii-io-1v8"))
@@ -236,6 +238,9 @@ static int ar803x_of_init(struct phy_device *phydev)
 			return -EINVAL;
 		}
 	}
+
+	debug("%s: flags=%x clk_25m_reg=%04x\n", __func__, priv->flags,
+	      priv->clk_25m_reg);
 #endif
 
 	return 0;

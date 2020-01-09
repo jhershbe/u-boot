@@ -553,7 +553,6 @@ static int eth_post_probe(struct udevice *dev)
 #else
 		printf("\nError: %s address not set.\n",
 		       dev->name);
-		return -EINVAL;
 #endif
 	}
 
